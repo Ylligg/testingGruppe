@@ -4,8 +4,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import oslomet.testing.API.AdminKundeController;
 import oslomet.testing.API.BankController;
+import oslomet.testing.DAL.AdminRepository;
 import oslomet.testing.DAL.BankRepository;
 import oslomet.testing.Models.Konto;
 import oslomet.testing.Models.Kunde;
@@ -16,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +33,16 @@ public class EnhetstestBankController {
     @Mock
     // denne skal Mock'es
     private BankRepository repository;
+
+    @InjectMocks
+    // denne skal testes
+    private AdminKundeController adminKundeController;
+
+    @Mock
+    // denne skal Mock'es
+    private AdminRepository adminKundeRepository;
+
+
 
     @Mock
     // denne skal Mock'es
@@ -99,6 +113,24 @@ public class EnhetstestBankController {
 
         // assert
         assertNull(resultat);
+    }
+
+    // nye tester
+
+    @Test
+    public void test_lagreKunde() {
+
+        // arrange
+        Kunde kunde1 = new Kunde("12345678911", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+
+        Mockito.when(adminKundeRepository.registrerKunde((any(Kunde.class)))).thenReturn("OK");
+
+        //act
+        String resultat = adminKundeController.lagreKunde(kunde1);
+
+        //assert
+        assertEquals("OK", resultat);
+
     }
 }
 
