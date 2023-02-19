@@ -120,17 +120,13 @@ public class EnhetstestBankController {
     @Test
     public void test_lagreKunde() {
 
-        // arrange
-        Kunde kunde1 = new Kunde("12345678911", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+        when(sjekk.loggetInn()).thenReturn(null);
 
-        Mockito.when(adminKundeRepository.registrerKunde((any(Kunde.class)))).thenReturn("OK");
+        // act
+        List<Konto> resultat = bankController.hentKonti();
 
-        //act
-        String resultat = adminKundeController.lagreKunde(kunde1);
-
-        //assert
-        assertEquals("OK", resultat);
-
+        // assert
+        assertNull(resultat);
     }
 }
 
