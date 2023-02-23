@@ -135,6 +135,21 @@ public class EnhetstestBankController {
     }
 
     @Test
+    public void test_lagreKundeFeil() {
+        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+
+        when(sjekk.loggetInn()).thenReturn("12345654321");
+
+        Mockito.when(adminKundeRepository.registrerKunde((any(Kunde.class)))).thenReturn("Feil");
+
+        // act
+        String resultat = adminKundeController.lagreKunde(kunde1);
+
+        // assert
+        assertEquals("Feil",resultat);
+    }
+
+    @Test
     public void test_HentAlleOK() {
 
         // lager kunder og liste
