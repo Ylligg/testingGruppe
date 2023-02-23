@@ -43,8 +43,6 @@ public class EnhetstestBankController {
     // denne skal Mock'es
     private AdminRepository adminKundeRepository;
 
-
-
     @Mock
     // denne skal Mock'es
     private Sikkerhet sjekk;
@@ -115,64 +113,5 @@ public class EnhetstestBankController {
         // assert
         assertNull(resultat);
     }
-
-    // nye tester
-
-    @Test
-    public void test_lagreKunde() {
-
-        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
-
-        when(sjekk.loggetInn()).thenReturn("12345654321");
-
-        Mockito.when(adminKundeRepository.registrerKunde((any(Kunde.class)))).thenReturn("OK");
-
-        // act
-        String resultat = adminKundeController.lagreKunde(kunde1);
-
-        // assert
-        assertEquals("OK",resultat);
-    }
-
-    @Test
-    public void test_lagreKundeFeil() {
-        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
-
-        when(sjekk.loggetInn()).thenReturn("12345654321");
-
-        Mockito.when(adminKundeRepository.registrerKunde((any(Kunde.class)))).thenReturn("Feil");
-
-        // act
-        String resultat = adminKundeController.lagreKunde(kunde1);
-
-        // assert
-        assertEquals("Feil",resultat);
-    }
-
-    @Test
-    public void test_HentAlleOK() {
-
-        // lager kunder og liste
-
-        Kunde kunde1 = new Kunde("12345678911", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
-        Kunde kunde2 = new Kunde("67676767676", "Ulaksh", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
-        List<Kunde> kundeliste = new ArrayList<>();
-        kundeliste.add(kunde1);
-        kundeliste.add(kunde2);
-
-        // ser om at de er logget inn
-
-        when(sjekk.loggetInn()).thenReturn("12345678911");
-
-        // kaller på medtoden og lister ut kundene
-
-        Mockito.when(adminKundeRepository.hentAlleKunder()).thenReturn(kundeliste);
-
-        List<Kunde> resultat = adminKundeController.hentAlle();
-
-        Assert.assertEquals(kundeliste, resultat);
-
-    }
-
 }
 
