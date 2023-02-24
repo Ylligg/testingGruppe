@@ -20,8 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -105,6 +104,30 @@ public class EnhetstestKundeController {
         // assert
         assertNull(resultat);
     }
+
+    @Test
+    public void test_slettKundeOK() {
+
+        when(sjekk.loggetInn()).thenReturn("12345678911");
+
+        Mockito.when(adminKundeRepository.slettKunde(anyString())).thenReturn("OK");
+
+        String resultat = adminKundeController.slett("12345678911");
+        Assert.assertEquals("OK", resultat);
+    }
+
+    @Test
+    public void test_slettEnKundeFeil() {
+
+        when(sjekk.loggetInn()).thenReturn("12345678911");
+
+        Mockito.when(adminKundeRepository.slettKunde(anyString())).thenReturn("Feil");
+
+        String resultat = adminKundeController.slett("12345678911");
+        Assert.assertEquals("Feil", resultat);
+    }
+
+
 
 
 
