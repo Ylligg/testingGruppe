@@ -35,14 +35,6 @@ public class EnhetstestBankController {
     // denne skal Mock'es
     private BankRepository repository;
 
-    @InjectMocks
-    // denne skal testes
-    private AdminKundeController adminKundeController;
-
-    @Mock
-    // denne skal Mock'es
-    private AdminRepository adminKundeRepository;
-
     @Mock
     // denne skal Mock'es
     private Sikkerhet sjekk;
@@ -113,5 +105,36 @@ public class EnhetstestBankController {
         // assert
         assertNull(resultat);
     }
+
+    @Test
+    public void hentTransaksjoner_loggetInn() {
+
+        List<Konto> konti = new ArrayList<>();
+        Konto konto1 = new Konto("105010123456", "01010110523",
+                720, "Lønnskonto", "NOK", null);
+        Konto konto2 = new Konto("105010123456", "12345678901",
+                1000, "Lønnskonto", "NOK", null);
+        konti.add(konto1);
+        konti.add(konto2);
+
+        when(sjekk.loggetInn()).thenReturn("01010110523");
+
+        when(repository.hentKonti(anyString())).thenReturn(konti);
+
+        // act
+        List<Konto> resultat = bankController.hentKonti();
+
+        // assert
+        assertEquals(konti, resultat);
+
+    }
+
+    @Test
+    public void hentTransaksjoner_ikkeloggetInn() {
+
+    }
+
+
+
 }
 
