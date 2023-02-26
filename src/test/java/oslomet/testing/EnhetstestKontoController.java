@@ -21,8 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -86,6 +85,22 @@ public class EnhetstestKontoController {
 
         // assert
         Assert.assertNull(resultat);
+
+    }
+
+
+
+    @Test
+    public void sjekkLoggInnOK() {
+
+        Kunde kunde1 = new Kunde("12345654321", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","ylli1105");
+        when(sjekk.loggetInn()).thenReturn("12345654321");
+
+        Mockito.when(repository.sjekkLoggInn(kunde1.getPersonnummer(), kunde1.getPassord())).thenReturn("OK");
+        String resultat = sjekk.sjekkLoggInn(kunde1.getPersonnummer(), kunde1.getPassord());
+
+        assertEquals("OK", resultat);
+
 
     }
 
