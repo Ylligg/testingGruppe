@@ -222,7 +222,33 @@ public class EnhetstestBankController {
 
     }
 
+    @Test
+    public void HentBetaling_logginn() {
+        List<Transaksjon> liste = new ArrayList<>();
+        Transaksjon tran1 = new Transaksjon(1, "1234141421", 3552.56, "2002-21-2", "Halla på deg", "aventer", "121514142617");
+        liste.add(tran1);
 
+        when(sjekk.loggetInn()).thenReturn("121514142617");
+
+        Mockito.when(repository.hentBetalinger(anyString())).thenReturn(liste);
+
+        List<Transaksjon> resultat = bankController.hentBetalinger();
+
+        assertEquals(liste, resultat);
+
+    }
+
+    @Test
+    public void HentBetaling_ikkelogginn() {
+
+        when(sjekk.loggetInn()).thenReturn("121514142617");
+        Mockito.when(repository.hentBetalinger(anyString())).thenReturn(null);
+
+        List<Transaksjon> resultat = bankController.hentBetalinger();
+
+        assertNull(resultat);
+
+    }
 
 
 
