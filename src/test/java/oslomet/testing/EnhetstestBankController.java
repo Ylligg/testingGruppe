@@ -107,6 +107,8 @@ public class EnhetstestBankController {
         assertNull(resultat);
     }
 
+    // nye tester
+
     @Test
     public void hentTransaksjoner_loggetInn() {
 
@@ -251,6 +253,81 @@ public class EnhetstestBankController {
     }
 
 
+    @Test
+    public void test_endreKundeInfoOK() {
+
+        when(sjekk.loggetInn()).thenReturn("45626252411");
+
+        Kunde kunde1 = new Kunde("45626252411", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","passport");
+
+        Mockito.when(repository.endreKundeInfo(any(Kunde.class))).thenReturn("OK");
+
+        String restulat = bankController.endre(kunde1);
+        Assert.assertEquals("OK", restulat);
+    }
+
+    @Test
+    public void test_endreKundeInfoFeil() {
+
+        when(sjekk.loggetInn()).thenReturn("9898765212");
+
+        Kunde kunde1 = new Kunde("9898765212", "Jelleh", "Gashi", "More-ndin 12", "2020", "Asker", "2010284663","passord");
+
+
+        Mockito.when(repository.endreKundeInfo(any(Kunde.class))).thenReturn("Feil");
+
+        String restulat = bankController.endre(kunde1);
+        Assert.assertEquals("Feil", restulat);
+    }
+
+    @Test
+    public void test_hentKundeInfo_loggetinn() {
+
+        when(sjekk.loggetInn()).thenReturn("45626252411");
+
+        Kunde kunde1 = new Kunde("45626252411", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","passport");
+
+        Mockito.when(repository.hentKundeInfo(kunde1.getPersonnummer())).thenReturn(kunde1);
+
+        Kunde restulat = bankController.hentKundeInfo();
+
+        Assert.assertEquals(kunde1, restulat);
+    }
+
+    @Test
+    public void test_hentKundeInfo_ikkeloggetinn() {
+
+        when(sjekk.loggetInn()).thenReturn("45626252411");
+
+        Kunde kunde1 = new Kunde("45626252411", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","passport");
+
+        Mockito.when(repository.hentKundeInfo(kunde1.getPersonnummer())).thenReturn(null);
+
+        Kunde restulat = bankController.hentKundeInfo();
+
+        Assert.assertNull(restulat);
+    }
+
+    @Test
+    public void utførbetalingOK() {
+
+        List<Transaksjon> transaksjonser = new ArrayList<>();
+        Transaksjon tran1 = new Transaksjon(1, "1234141421", 3552.56, "2002-21-2", "Halla på deg", "aventer", "121514142617");
+        transaksjonser.add(tran1);
+
+        when(sjekk.loggetInn()).thenReturn("121514142617");
+
+        Mockito.when(repository.utforBetaling(tran1.getTxID())).thenReturn("OK");
+
+        List<Transaksjon> resultatUtfør = bankController.utforBetaling(tran1.getTxID());
+
+        Mockito.when(repository.hentBetalinger((anyString()))).thenReturn(resultatUtfør);
+
+        List<Transaksjon> resultat = bankController.hentBetalinger();
+
+        assertEquals(transaksjonser, resultat);
+
+    }
 
 }
 

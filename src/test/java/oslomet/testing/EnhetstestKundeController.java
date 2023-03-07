@@ -71,6 +71,15 @@ public class EnhetstestKundeController {
     }
 
     @Test
+    public void test_lagreKundeikkeloggetinn() {
+        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+
+        String resultat = adminKundeController.lagreKunde(kunde1);
+
+        assertEquals("Ikke logget inn",resultat);
+    }
+
+    @Test
     public void test_HentAlleOK() {
 
         // lager kunder og liste
@@ -133,6 +142,15 @@ public class EnhetstestKundeController {
     }
 
     @Test
+    public void test_endreKundeikkeloggetinn() {
+        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+
+        String resultat = adminKundeController.endre(kunde1);
+
+        assertEquals("Ikke logget inn",resultat);
+    }
+
+    @Test
     public void test_slettKundeOK() {
 
         when(sjekk.loggetInn()).thenReturn("12345678911");
@@ -153,6 +171,19 @@ public class EnhetstestKundeController {
         String resultat = adminKundeController.slett("12345678911");
         Assert.assertEquals("Feil", resultat);
     }
+
+    @Test
+    public void test_slettKundeikkeloggetinn() {
+        Kunde kunde1 = new Kunde("12345654321", "Ylli", "Gashi", "Olebrummsvei 27", "1054", "OSLO", "40168017","ylli1105");
+
+        String resultat = adminKundeController.slett(kunde1.getPersonnummer());
+
+        assertEquals("Ikke logget inn",resultat);
+    }
+
+
+
+
 
 
 

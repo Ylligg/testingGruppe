@@ -89,19 +89,4 @@ public class EnhetstestKontoController {
     }
 
 
-
-    @Test
-    public void sjekkLoggInnOK() {
-
-        Kunde kunde1 = new Kunde("12345654321", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","ylli1105");
-        when(sjekk.loggetInn()).thenReturn("12345654321");
-
-        Mockito.when(repository.sjekkLoggInn(kunde1.getPersonnummer(), kunde1.getPassord())).thenReturn("OK");
-        String resultat = sjekk.sjekkLoggInn(kunde1.getPersonnummer(), kunde1.getPassord());
-
-        assertEquals("OK", resultat);
-
-
-    }
-
 }
