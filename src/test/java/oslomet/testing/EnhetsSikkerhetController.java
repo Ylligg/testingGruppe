@@ -7,7 +7,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import oslomet.testing.API.AdminKundeController;
 import oslomet.testing.API.BankController;
@@ -20,12 +22,15 @@ import oslomet.testing.Sikkerhet.Sikkerhet;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 
@@ -135,14 +140,30 @@ public class EnhetsSikkerhetController {
 
     @Test
     public void test_logginn() {
+        Map<String,Object> attributes = new HashMap<String,Object>();
 
-        Kunde kunde1 = new Kunde("12345654389", "Illi", "Gashi", "Fare-ndin 21", "4021", "Ås", "88888888","105");
+        doAnswer(new Answer<Object>(){
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                String key = (String) invocation.getArguments()[0];
+                return attributes.get(key);
+            }
+        }).when(session).getAttribute(anyString());
 
-        session.setAttribute("i", "K");
-        String i = (String) session.getAttribute("i");
+        doAnswer(new Answer<Object>(){
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                String key = (String) invocation.getArguments()[0];
+                Object value = invocation.getArguments()[1];
+                attributes.put(key, value);
+                return null;
+            }
+        }).when(session).setAttribute(anyString(), any());
 
+        session.setAttribute("Innlogget", "12345678921");
+        String resultat = sikker.loggetInn();
 
-        assertEquals("Innlogget",i);
+        assertEquals("12345678921", resultat);
     }
 
     @Test
